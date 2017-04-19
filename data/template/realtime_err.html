@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>WebTail</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style type="text/css">
+        body {
+            background-color: white;
+            color: black;
+            font: 13px/1.4 monaco, "Courier New", Courier, monospace;
+            margin: 0px;
+            padding: 10px 10px;
+        }
+
+        h1 {
+            background-color: #222;
+            color: greenyellow;
+            font-size: 1.2em;
+            font-weight: 600;
+            position: fixed;
+            width: 100%;
+            margin: 0;
+            top: 0;
+            left: 0;
+            padding: 5px 20px;
+        }
+
+        #messages {
+            margin: 10px 0px 10px 0px;
+            padding: 10px 0px;
+            color: #999;
+        }
+
+        #messages p {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: black;
+            line-height: 100%;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<h1>{{.Log}}</h1>
+<div id="messages"></div>
+<script>
+    $(document).ready(function () {
+        if (window.WebSocket) {
+            ws = new WebSocket("ws://{{.Host}}/follow");
+            ws.onmessage = function (e) {
+                $("#messages").append("<p>" + e.data + "</p>");
+                console.log("websocket: " + e.data);
+                $('html, body').animate({scrollTop: $(document).height()}, 'fast');
+            };
+        } else {
+            alert("WebSocket NOT SUPPORTED!");
+        }
+    });
+</script>
+</body>
+</html>

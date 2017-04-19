@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style type="text/css">
+    table.gridtable {
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #666666;
+        border-collapse: collapse;
+    }
+    
+    table.gridtable th {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #dedede;
+    }
+    
+    table.gridtable td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #ffffff;
+    }
+    
+    ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+    
+    ul.pagination li {
+        display: inline;
+    }
+    
+    ul.pagination li a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+    
+    ul.pagination li.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+    
+    ul.pagination li a:hover:not(.active) {
+        background-color: #ddd;
+    }
+    
+    ul.pagination li a {
+        border-radius: 5px;
+    }
+    
+    ul.pagination li.active {
+        border-radius: 5px;
+    }
+    
+    ul.pagination li a {
+        transition: background-color .3s;
+    }
+    
+    ul.pagination li a {
+        border: 1px solid #ddd;
+        /* Gray */
+    }
+    
+    .pagination li:first-child a {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+    
+    .pagination li:last-child a {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    
+    ul.pagination li a {
+        margin: 0 4px;
+        /* 0 is for top and bottom. Feel free to change it */
+    }
+    
+    div.center {
+        text-align: center;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="am-cf">
+        共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}}
+        <div class="am-fr">
+            <ul class="pagination">
+                <li class=""><a href="/errpage?curPage={{.paginator.firstpage}}">«</a></li>
+                {{range $index,$page := .paginator.pages}}
+                <li {{if eq $.paginator.currpage $page }}class="active" {{end}}><a href="/errpage?curPage={{$page}}">{{$page}}</a></li>
+                {{end}}
+                <li><a href="/errpage?curPage={{.paginator.lastpage}}">»</a></li>
+            </ul>
+        </div>
+    </div>
+    <table class="gridtable">
+        <tr>
+            <th>id</th>
+            <th>错误</th>
+            <th>时间</th>
+        </tr>
+        {{range $index,$data := .errors}}
+        <tr>
+            <td>{{$data.Id}}</td>
+            <td><pre>{{$data.LogName}}</pre></td>
+            <td>{{$data.Created}}</td>
+        </tr>
+        {{end}}
+    </table>
+    <div class="am-cf">
+        共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}}
+        <div class="am-fr">
+            <ul class="pagination">
+                <li class=""><a href="/errpage?curPage={{.paginator.firstpage}}">«</a></li>
+                {{range $index,$page := .paginator.pages}}
+                <li {{if eq $.paginator.currpage $page }}class="active" {{end}}><a href="/errpage?curPage={{$page}}">{{$page}}</a></li>
+                {{end}}
+                <li><a href="/errpage?curPage={{.paginator.lastpage}}">»</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
