@@ -99,6 +99,11 @@ func dbCheckErr(err error) {
 	}
 }
 
+const (
+	errorStr   string = "stack traceback"
+	maxErrLine int    = 30
+)
+
 var (
 	logErrLines int
 	logGetErr   bool

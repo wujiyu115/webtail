@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/hpcloud/tail"
 	"golang.org/x/net/websocket"
@@ -69,16 +68,6 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const (
-	errorStr   string = "stack traceback"
-	maxErrLine int    = 30
-)
-
-var (
-	errLines int
-	getErr   bool
-)
-
 func sendWebSocket(ws *websocket.Conn, data string) {
 	// log.Println(data)
 	ws.Write([]byte(data))
@@ -92,25 +81,6 @@ func handleFollow(ws *websocket.Conn) {
 		return
 	}
 	for line := range t.Lines {
-		if strings.Contains(line.Text, errorStr) {
-			getErr = true
-			errLines = 0
-			sendWebSocket(ws, line.Text)
-			continue
-		}
-
-		if !getErr {
-			continue
-		}
-
 		sendWebSocket(ws, line.Text)
-		errLines = errLines + 1
-
-		if errLines < maxErrLine {
-			continue
-		}
-		errLines = 0
-		getErr = false
-
 	}
 }
