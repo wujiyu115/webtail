@@ -16,6 +16,7 @@ func main() {
 	root.Get("/follow", websocket.Handler(handleFollow).ServeHTTP)
 	root.Get("/realtime_err", handleRealTimeErr)
 	root.Get("/err_page", handleErrPage)
+	root.Get("/clean_err", handleCleanErr)
 
 	log.Printf("HTTP listening at: %v", opts.ListenAddr)
 	http.ListenAndServe(opts.ListenAddr, root)

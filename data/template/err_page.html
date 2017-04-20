@@ -42,7 +42,7 @@
     ul.pagination li a {
         color: black;
         float: left;
-        padding: 8px 16px;
+        padding: 5px 10px;
         text-decoration: none;
     }
     
@@ -95,7 +95,7 @@
 
 <body>
     <div class="am-cf">
-        共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}}
+        <!-- 共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}} -->
         <div class="am-fr">
             <ul class="pagination">
                 <li class=""><a href="/errpage?curPage={{.paginator.firstpage}}">«</a></li>
@@ -121,7 +121,7 @@
         {{end}}
     </table>
     <div class="am-cf">
-        共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}}
+        <!-- 共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}} -->
         <div class="am-fr">
             <ul class="pagination">
                 <li class=""><a href="/errpage?curPage={{.paginator.firstpage}}">«</a></li>

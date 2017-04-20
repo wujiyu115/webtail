@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -83,4 +84,10 @@ func handleFollow(ws *websocket.Conn) {
 	for line := range t.Lines {
 		sendWebSocket(ws, line.Text)
 	}
+}
+
+func handleCleanErr(w http.ResponseWriter, r *http.Request) {
+	row := dbDelete()
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write([]byte("成功清除" + fmt.Sprintf("%d", row) + "条记录"))
 }
