@@ -18,11 +18,22 @@ type ErrSt struct {
 	Created time.Time
 }
 
+const (
+	errorStr   string = "stack traceback"
+	maxErrLine int    = 30
+)
+
+var (
+	logErrLines int
+	logGetErr   bool
+	errRecord   bytes.Buffer
+)
+
 var db, err = sql.Open("sqlite3", "./errlog.db")
 
 // dbCheckErr   (conn_err)
 
-func dbInsert(logName string) int64 {
+func errLogInsert(logName string) int64 {
 	//插入数据
 	stmt, err := db.Prepare("insert into errlog(logname) values(?)")
 	dbCheckErr(err)
@@ -33,7 +44,7 @@ func dbInsert(logName string) int64 {
 	return affect
 }
 
-func dbQuery(page int, size int) []ErrSt {
+func errLogQuery(page int, size int) []ErrSt {
 	//查询数据
 	sql := "select * from errlog order by created desc limit " + fmt.Sprintf("%d", size) + " offset " + fmt.Sprintf("%d", (page-1)*size)
 	rows, err := db.Query(sql)
@@ -57,7 +68,7 @@ func dbQuery(page int, size int) []ErrSt {
 	return datas
 }
 
-func dbTotalCount() int64 {
+func errLogTotalCount() int64 {
 	sql := "select count(id) from errlog"
 	rows, err := db.Query(sql)
 	dbCheckErr(err)
@@ -72,7 +83,7 @@ func dbTotalCount() int64 {
 	return 0
 }
 
-func dbDelete() int64 {
+func errLogDelete() int64 {
 	//删除数据
 	stmt, err := db.Prepare("delete from errlog where created<?")
 	dbCheckErr(err)
@@ -99,27 +110,18 @@ func dbCheckErr(err error) {
 	}
 }
 
-const (
-	errorStr   string = "stack traceback"
-	maxErrLine int    = 30
-)
-
-var (
-	logErrLines int
-	logGetErr   bool
-	errRecord   bytes.Buffer
-)
-
 func logWrite(data string) {
 	errRecord.WriteString(data + "\n")
 }
 
-func logInsertAndClean() {
-	dbInsert(errRecord.String())
+func logInsertAndClean(hub *Hub) {
+	message := errRecord.String()
+	errLogInsert(message)
+	hub.broadcast <- []byte(message)
 	errRecord = bytes.Buffer{}
 }
 
-func mainLogInsert() {
+func errLogTail(hub *Hub) {
 	t, err := tail.TailFile(opts.Log, tail.Config{Follow: true, ReOpen: true, Location: &tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}})
 	if err != nil {
 		log.Printf("tail file failed, err: %v", err)
@@ -128,7 +130,7 @@ func mainLogInsert() {
 	for line := range t.Lines {
 		if strings.Contains(line.Text, errorStr) {
 			if logErrLines != 0 {
-				logInsertAndClean()
+				logInsertAndClean(hub)
 			}
 			logGetErr = true
 			logErrLines = 0
@@ -148,25 +150,9 @@ func mainLogInsert() {
 			continue
 		}
 
-		logInsertAndClean()
+		logInsertAndClean(hub)
 		logErrLines = 0
 		logGetErr = false
 
 	}
 }
-
-// func main() {
-// 	// dbDelete()
-// 	// count := dbTotalCount()
-// 	// fmt.Println(count)
-// 	// dbInsert("1111111111122222sdf")
-
-// 	datas := dbQuery(1, 5)
-// 	// for i := 0; i < len(datas); i++ {
-// 	// 	fmt.Println(datas[i].created)
-// 	// }
-// 	for k, v := range datas {
-// 		fmt.Printf("%v -> %v\n", k, v.LogName)
-// 	}
-// 	dbClose()
-// }

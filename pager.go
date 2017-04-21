@@ -1,11 +1,3 @@
-/**
- * Copyright 2014 @ Ops.
- * name :
- * author : newmin
- * date : 2013-11-17 07:49
- * description :
- * history :
- */
 package main
 
 import (

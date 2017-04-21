@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <title>WebTail</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -10,7 +11,7 @@
             margin: 0px;
             padding: 10px 10px;
         }
-
+        
         h1 {
             background-color: #222;
             color: greenyellow;
@@ -23,13 +24,13 @@
             left: 0;
             padding: 5px 20px;
         }
-
+        
         #messages {
             margin: 10px 0px 10px 0px;
             padding: 10px 0px;
             color: #999;
         }
-
+        
         #messages p {
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -38,23 +39,35 @@
             font-size: 14px;
         }
     </style>
-</head>
-<body>
-<h1>{{.Log}}</h1>
-<div id="messages"></div>
-<script>
-    $(document).ready(function () {
-        if (window.WebSocket) {
-            ws = new WebSocket("ws://{{.Host}}/follow");
-            ws.onmessage = function (e) {
-                $("#messages").append("<p>" + e.data + "</p>");
-                console.log("websocket: " + e.data);
-                $('html, body').animate({scrollTop: $(document).height()}, 'fast');
-            };
-        } else {
-            alert("WebSocket NOT SUPPORTED!");
+    <script type="text/javascript">
+        var ws
+        $(document).ready(function() {
+            if (window.WebSocket) {
+                ws = new WebSocket("ws://{{.Host}}/ws_err");
+                ws.onmessage = function(e) {
+                    $("#messages").append("<p>" + e.data + "</p>");
+                    console.log("websocket: " + e.data);
+                    $('html, body').animate({
+                        scrollTop: $(document).height()
+                    }, 'fast');
+                };
+            } else {
+                alert("WebSocket NOT SUPPORTED!");
+            }
+        });
+
+        function disconn() {
+            if (ws) {
+                ws.close()
+            }
         }
-    });
-</script>
+    </script>
+</head>
+
+<body onunload='disconn()'>
+    <input type='button' value='断开连接1111111111111111111' onclick='disconn()'>
+    <h1>{{.Log}}</h1>
+    <div id="messages"></div>
 </body>
+
 </html>
