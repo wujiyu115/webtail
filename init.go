@@ -5,6 +5,7 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	// "net/http"
 
 	log "github.com/Sirupsen/logrus"
 	flags "github.com/jessevdk/go-flags"
@@ -15,7 +16,12 @@ var opts struct {
 	ListenAddr string `long:"listen" default:"0.0.0.0:8327" description:"HTTP address and port to listen at"`
 	Template   string `long:"template" default:"data/template/index.html" description:"the template base file"`
 	Log        string `long:"log" description:"the log file to tail -f"`
+	Master     string `long:"master" description:"center server"`
 }
+
+var (
+	salves = make(map[string]interface{})
+)
 
 func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -40,4 +46,17 @@ func init() {
 		FullTimestamp:   true,
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
+
+	// salveConn()
 }
+
+// func salveConn() {
+// 	if opts.Master == "" {
+// 		return 
+// 	}
+// 	port := strings.Split(opts.ListenAddr, ":")[1]
+// 	master := "http:// "+ fmt.Sprintf("%v", opts.Master)+"/slave_conn?port=" + port
+// 	fmt.Println(master)
+// 	resp, err := http.Get(master)
+	
+// }

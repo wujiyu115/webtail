@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func wirteResponse(w http.ResponseWriter, info string) {
@@ -78,4 +79,10 @@ func handleCleanErr(w http.ResponseWriter, r *http.Request) {
 func handleReportErr(w http.ResponseWriter, r *http.Request) {
 	errLogInsert("error")
 	wirteResponse(w, "ok")
+}
+
+func handleSlaveConn(w http.ResponseWriter, r *http.Request) {
+	ip:= strings.Split(r.RemoteAddr, ":")[0]
+	salves[ip] = true
+	wirteResponse(w, ip)
 }

@@ -16,12 +16,15 @@ func main() {
 	go errLogTail(hub)
 
 	root.Get("/", handleHome)
+
 	root.Get("/ws_err", func(w http.ResponseWriter, r *http.Request) {
 		handleErrWebSocket(hub, w, r)
 	})
 	root.Get("/realtime_err", handleRealTimeErr)
 	root.Get("/err_page", handleErrPage)
 	root.Get("/clean_err", handleCleanErr)
+
+	root.Get("/slave_conn", handleSlaveConn)
 	root.Get("/report_err", handleReportErr)
 
 	log.Printf("HTTP listening at: %v", opts.ListenAddr)

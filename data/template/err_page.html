@@ -98,11 +98,11 @@
         <!-- 共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}} -->
         <div class="am-fr">
             <ul class="pagination">
-                <li class=""><a href="/errpage?curPage={{.paginator.firstpage}}">«</a></li>
+                <li class=""><a href="/err_page?curPage={{.paginator.firstpage}}">«</a></li>
                 {{range $index,$page := .paginator.pages}}
-                <li {{if eq $.paginator.currpage $page }}class="active" {{end}}><a href="/errpage?curPage={{$page}}">{{$page}}</a></li>
+                <li {{if eq $.paginator.currpage $page }}class="active" {{end}}><a href="/err_page?curPage={{$page}}">{{$page}}</a></li>
                 {{end}}
-                <li><a href="/errpage?curPage={{.paginator.lastpage}}">»</a></li>
+                <li><a href="/err_page?curPage={{.paginator.lastpage}}">»</a></li>
             </ul>
         </div>
     </div>
@@ -124,11 +124,11 @@
         <!-- 共记{{.paginator.totalpages}} 页 当前页 {{.paginator.currpage}} -->
         <div class="am-fr">
             <ul class="pagination">
-                <li class=""><a href="/errpage?curPage={{.paginator.firstpage}}">«</a></li>
+                <li class=""><a href="/err_page?curPage={{.paginator.firstpage}}">«</a></li>
                 {{range $index,$page := .paginator.pages}}
-                <li {{if eq $.paginator.currpage $page }}class="active" {{end}}><a href="/errpage?curPage={{$page}}">{{$page}}</a></li>
+                <li {{if eq $.paginator.currpage $page }}class="active" {{end}}><a href="/err_page?curPage={{$page}}">{{$page}}</a></li>
                 {{end}}
-                <li><a href="/errpage?curPage={{.paginator.lastpage}}">»</a></li>
+                <li><a href="/err_page?curPage={{.paginator.lastpage}}">»</a></li>
             </ul>
         </div>
     </div>
